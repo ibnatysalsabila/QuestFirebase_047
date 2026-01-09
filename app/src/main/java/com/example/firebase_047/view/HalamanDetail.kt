@@ -95,3 +95,43 @@ fun DetailSiswaScreen(
         )
     }
 }
+
+@Composable
+private fun BodyDetailDataSiswa(
+    statusUIDetail: StatusUIDetail,
+    onDelete: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium)),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
+
+        when (statusUIDetail) {
+            is StatusUIDetail.Loading -> {
+                CircularProgressIndicator()
+            }
+
+            is StatusUIDetail.Success -> {
+                DetailDataSiswa(
+                    siswa = statusUIDetail.satusiswa,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                OutlinedButton(
+                    onClick = { deleteConfirmationRequired = true },
+                    shape = MaterialTheme.shapes.small,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(stringResource(R.string.delete))
+                }
+            }
+
+            StatusUIDetail.Error -> {
+                Text("Data siswa tidak ditemukan")
+            }
+        }
+
+       
